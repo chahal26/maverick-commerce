@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Category extends Model
+class Product extends Model
 {
     use HasFactory;
 
@@ -15,19 +15,15 @@ class Category extends Model
      * @var array<int, string>
      */
     protected $fillable = [
-        'parent_id',
+        'type',
         'name',
         'slug',
-        'image',
-        'is_active'
+        'SKU',
+        'description',
+        'actual_price',
+        'selling_price',
+        'shipping_charges',
+        'stock',
+        'status'
     ];
-
-    public function parent() {
-        return $this->hasOne(Category::class,'id','parent_id');
-    }
-
-    public function children() {
-        return $this->hasMany(Category::class,'parent_id','id');
-    }
-
 }
