@@ -13,6 +13,7 @@ use Filament\Tables;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Support\Str;
+use Filament\Forms\Components\Fieldset;
 
 class ProductResource extends Resource
 {
@@ -24,60 +25,67 @@ class ProductResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\MultiSelect::make('categories')
-                    ->relationship('categories', 'name'),
-                Forms\Components\TextInput::make('name')
-                    ->required()
-                    ->maxLength(255)
-                    ->label('Product Name')
-                    ->reactive()
-                    ->afterStateUpdated(function ($set, $state, $context) {
-                        if ($context === 'edit') {
-                            return;
-                        }
+                Fieldset::make('Product Details')
+                    ->schema([
+                        Forms\Components\MultiSelect::make('categories')
+                            ->relationship('categories', 'name'),
+                        Forms\Components\TextInput::make('name')
+                            ->required()
+                            ->maxLength(255)
+                            ->label('Product Name')
+                            ->reactive()
+                            ->afterStateUpdated(function ($set, $state, $context) {
+                                if ($context === 'edit') {
+                                    return;
+                                }
 
-                        $set('slug', Str::slug($state));
-                    }),
-                Forms\Components\TextInput::make('slug')
-                    ->required()
-                    ->maxLength(255)
-                    ->rules(['alpha_dash'])
-                    ->unique(ignoreRecord: true),
-                Forms\Components\TextInput::make('SKU')
-                    ->maxLength(255)
-                    ->required()
-                    ->label('SKU'),
-                Forms\Components\MarkdownEditor::make('description')
-                    ->maxLength(65535),
-                Forms\Components\TextInput::make('actual_price')
-                    ->required()
-                    ->numeric()
-                    ->default(0)
-                    ->mask(fn (Forms\Components\TextInput\Mask $mask) => $mask
-                        ->numeric()
-                        ->decimalPlaces(2)
-                    ),
-                Forms\Components\TextInput::make('selling_price')
-                    ->required()
-                    ->numeric()
-                    ->default(0)
-                    ->mask(fn (Forms\Components\TextInput\Mask $mask) => $mask
-                        ->numeric()
-                        ->decimalPlaces(2)
-                    ),
-                Forms\Components\TextInput::make('shipping_charges')
-                    ->required()
-                    ->numeric()
-                    ->default(0)
-                    ->mask(fn (Forms\Components\TextInput\Mask $mask) => $mask
-                        ->numeric()
-                        ->decimalPlaces(2)
-                    ),
-                Forms\Components\TextInput::make('stock')
-                    ->required()
-                    ->numeric(),
-                Forms\Components\Toggle::make('status')
-                    ->required(),
+                                $set('slug', Str::slug($state));
+                            }),
+                        Forms\Components\TextInput::make('slug')
+                            ->required()
+                            ->maxLength(255)
+                            ->rules(['alpha_dash'])
+                            ->unique(ignoreRecord: true),
+                        Forms\Components\TextInput::make('SKU')
+                            ->maxLength(255)
+                            ->required()
+                            ->label('SKU'),
+                        Forms\Components\MarkdownEditor::make('description')
+                            ->maxLength(65535),
+                        Forms\Components\TextInput::make('actual_price')
+                            ->required()
+                            ->numeric()
+                            ->default(0)
+                            ->mask(fn (Forms\Components\TextInput\Mask $mask) => $mask
+                                ->numeric()
+                                ->decimalPlaces(2)
+                            ),
+                        Forms\Components\TextInput::make('selling_price')
+                            ->required()
+                            ->numeric()
+                            ->default(0)
+                            ->mask(fn (Forms\Components\TextInput\Mask $mask) => $mask
+                                ->numeric()
+                                ->decimalPlaces(2)
+                            ),
+                        Forms\Components\TextInput::make('shipping_charges')
+                            ->required()
+                            ->numeric()
+                            ->default(0)
+                            ->mask(fn (Forms\Components\TextInput\Mask $mask) => $mask
+                                ->numeric()
+                                ->decimalPlaces(2)
+                            ),
+                        Forms\Components\TextInput::make('stock')
+                            ->required()
+                            ->numeric(),
+                        Forms\Components\Toggle::make('status')
+                            ->required(),
+                    ]),
+                Fieldset::make('Product Gallery')
+                    ->schema([
+
+                    ])
             ]);
     }
 
