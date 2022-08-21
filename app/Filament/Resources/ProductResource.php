@@ -83,20 +83,11 @@ class ProductResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('type'),
                 Tables\Columns\TextColumn::make('name'),
                 Tables\Columns\TextColumn::make('slug'),
                 Tables\Columns\TextColumn::make('SKU'),
-                Tables\Columns\TextColumn::make('description'),
-                Tables\Columns\TextColumn::make('actual_price'),
-                Tables\Columns\TextColumn::make('selling_price'),
-                Tables\Columns\TextColumn::make('shipping_charges'),
                 Tables\Columns\TextColumn::make('stock'),
                 Tables\Columns\BooleanColumn::make('status'),
-                Tables\Columns\TextColumn::make('created_at')
-                    ->dateTime(),
-                Tables\Columns\TextColumn::make('updated_at')
-                    ->dateTime(),
             ])
             ->filters([
                 //
