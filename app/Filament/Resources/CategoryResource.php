@@ -26,7 +26,7 @@ class CategoryResource extends Resource
             ->schema([
                 Forms\Components\Select::make('parent_id')
                     ->label('Category')
-                    ->options(Category::all()->pluck('name', 'id'))
+                    ->options(fn(?Category $record) =>  $record === null ? Category::pluck('name', 'id') : Category::where('id', '!=', $record->id)->pluck('name', 'id'))
                     ->default(0),
                 Forms\Components\TextInput::make('name')
                     ->required()
