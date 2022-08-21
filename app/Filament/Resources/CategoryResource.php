@@ -55,15 +55,11 @@ class CategoryResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('parent_id'),
-                Tables\Columns\TextColumn::make('name'),
-                Tables\Columns\TextColumn::make('slug'),
-                Tables\Columns\TextColumn::make('image'),
-                Tables\Columns\TextColumn::make('is_active'),
-                Tables\Columns\TextColumn::make('created_at')
-                    ->dateTime(),
-                Tables\Columns\TextColumn::make('updated_at')
-                    ->dateTime(),
+                Tables\Columns\ImageColumn::make('image')->label('Image'),
+                Tables\Columns\TextColumn::make('name')->label('Name'),
+                Tables\Columns\TextColumn::make('parent.name')->label('Parent'),
+                Tables\Columns\TextColumn::make('slug')->label('Slug'),
+                Tables\Columns\BooleanColumn::make('is_active')->label('Status'),
             ])
             ->filters([
                 //
