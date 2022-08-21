@@ -12,6 +12,7 @@ use Filament\Resources\Table;
 use Filament\Tables;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Str;
 
 class CategoryResource extends Resource
 {
@@ -23,17 +24,30 @@ class CategoryResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('parent_id')
-                    ->required(),
+                Forms\Components\Select::make('parent_id')
+                    ->label('Category')
+                    ->options(Category::all()->pluck('name', 'id'))
+                    ->default(0),
                 Forms\Components\TextInput::make('name')
                     ->required()
-                    ->maxLength(255),
+                    ->maxLength(255)
+                    ->label('Category Name')
+                    ->reactive()
+                    ->afterStateUpdated(function ($set, $state, $context) {
+                        if ($context === 'edit') {
+                            return;
+                        }
+
+                        $set('slug', Str::slug($state));
+                    }),
                 Forms\Components\TextInput::make('slug')
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('image')
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('is_active')
-                    ->required(),
+                    ->required()
+                    ->maxLength(255)
+                    ->rules(['alpha_dash'])
+                    ->unique(ignoreRecord: true),
+                Forms\Components\FileUpload::make('image')
+                    ->image(),
+                Forms\Components\Toggle::make('is_active'),
             ]);
     }
 
@@ -61,14 +75,14 @@ class CategoryResource extends Resource
                 Tables\Actions\DeleteBulkAction::make(),
             ]);
     }
-    
+
     public static function getRelations(): array
     {
         return [
             //
         ];
     }
-    
+
     public static function getPages(): array
     {
         return [
@@ -76,5 +90,5 @@ class CategoryResource extends Resource
             'create' => Pages\CreateCategory::route('/create'),
             'edit' => Pages\EditCategory::route('/{record}/edit'),
         ];
-    }    
+    }
 }
