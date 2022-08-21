@@ -24,6 +24,8 @@ class ProductResource extends Resource
     {
         return $form
             ->schema([
+                Forms\Components\MultiSelect::make('categories')
+                    ->relationship('categories', 'name'),
                 Forms\Components\TextInput::make('name')
                     ->required()
                     ->maxLength(255)
